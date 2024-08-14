@@ -9,6 +9,7 @@ from vhs_bot_ctest.browse.registry import BrowserRegistry
 @click.option(
     "--course",
     default=None,
+    required=True,
     help="Course name.",
     type=click.Choice(BrowserRegistry.get_names(), case_sensitive=True),
 )
