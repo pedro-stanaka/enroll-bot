@@ -7,11 +7,13 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 lint = "vhs_bot_ctest.scripts.lint:format_and_lint"
+main = "vhs_bot_ctest.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 playwright = "^1.46.0"
 requests = "^2.32.3"
+click = "^8.1.7"
 
 
 [tool.poetry.group.dev.dependencies]

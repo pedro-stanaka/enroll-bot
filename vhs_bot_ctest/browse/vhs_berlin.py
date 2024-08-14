@@ -1,16 +1,16 @@
-from browse.base import BaseSiteBrowser
-from playwright.sync_api import sync_playwright
+from vhs_bot_ctest.browse.base import BaseSiteBrowser
 
 
 class VhsBerlinBrowser(BaseSiteBrowser):
-    def is_place_available(self):
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            page = browser.new_page()
-            page.goto(self.site)
-            message = page.query_selector("#bomain #error_message").inner_text()
+    COURSES_URL = "https://www.vhsit.berlin.de/vhskurse/BusinessPages/CourseSearch.aspx?direkt=1&begonnen=0&beendet=0&stichw=Pr%FCfungstermin%20Einb%FCrgerungstest"
 
-            if "wurden keine Kurse gefunden" in message:
-                return False
+    def __init__(self):
+        super().__init__(self.COURSES_URL)
 
-        return True
+    @staticmethod
+    def name():
+        return "vhs_citizenship"
+
+    def is_place_available(self, agent=None):
+        message = self.get_text_for_element("#bomain #error_message", agent)
+        return "wurden keine Kurse gefunden" not in message
