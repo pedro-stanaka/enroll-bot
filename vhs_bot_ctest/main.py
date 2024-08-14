@@ -3,7 +3,6 @@
 import click
 
 from vhs_bot_ctest.browse.registry import BrowserRegistry
-from vhs_bot_ctest.browse.vhs_berlin import VhsBerlinBrowser
 
 
 @click.command()
@@ -20,6 +19,9 @@ from vhs_bot_ctest.browse.vhs_berlin import VhsBerlinBrowser
 )
 def main(course, agent):
     """Check the availability of free slots for courses and tests at VHS schools."""
+    # TODO: introduce a watch mode
+    # TODO: notify the user about the availability of a place
+    # TODO: allow overriding browser config in playwright via ENV vars or CLI args
     browser = BrowserRegistry.get_browser(course)
     if browser.is_place_available(agent=agent):
         print("Place is available.")

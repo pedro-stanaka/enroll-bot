@@ -5,4 +5,4 @@ jobs=4  # Number of processes to use
 good-names=nameOfYourProject  # Names to be considered okay
 
 [MESSAGES CONTROL]
-disable=E0401, C0301, C0114, C0115, C0116, R0903
+disable=E0401, C0301, C0114, C0115, C0116, R0903, W0511
