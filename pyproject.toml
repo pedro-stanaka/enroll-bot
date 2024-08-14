@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Script to automate the process of checking the availability of free slots for courses and tests at VHS schools."
 authors = ["Pedro Tanaka <pedro.stanaka@gmail.com>"]
 readme = "README.md"
-package-mode = false
+
+[tool.poetry.scripts]
+lint = "vhs_bot_ctest.scripts.lint:format_and_lint"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -14,6 +16,30 @@ requests = "^2.32.3"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.2.6"
+isort = "^5.13.2"
+black = "^24.8.0"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
 
 [build-system]
 requires = ["poetry-core"]
