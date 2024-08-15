@@ -14,6 +14,7 @@ python = "^3.11"
 playwright = "^1.46.0"
 requests = "^2.32.3"
 click = "^8.1.7"
+structlog = "^24.4.0"
 
 
 [tool.poetry.group.dev.dependencies]
