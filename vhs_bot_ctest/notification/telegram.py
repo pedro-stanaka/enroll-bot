@@ -9,6 +9,7 @@ class MissingTokenOrChatIdError(ValueError):
 
 class TelegramNotification(BaseNotification):
     TELEGRAM_URL_TEMPLATE = "https://api.telegram.org/bot{}/sendMessage"
+    TELEGRAM_TIMEOUT_SECONDS = 5
 
     def __init__(self, token, chat_id):
         self.token = token
@@ -17,7 +18,9 @@ class TelegramNotification(BaseNotification):
     def send(self, message) -> bool:
         self.__validate_token_and_chat_id()
         url = self.TELEGRAM_URL_TEMPLATE.format(self.token)
-        resp = requests.post(url, data={"chat_id": self.chat_id, "text": message})
+        resp = requests.post(
+            url, data={"chat_id": self.chat_id, "text": message}, timeout=self.TELEGRAM_TIMEOUT_SECONDS
+        )
         return resp.status_code == 200
 
     def name(self) -> str:

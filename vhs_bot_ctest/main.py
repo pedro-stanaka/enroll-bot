@@ -44,7 +44,13 @@ FIVE_MINUTES_SECONDS = 5 * 60
     default=FIVE_MINUTES_SECONDS,
     help=f"Check interval in seconds (default {FIVE_MINUTES_SECONDS} seconds).",
 )
-def main(course, notification_type=None, agent=None, watch=False, check_interval=60, ):
+def main(
+    course,
+    notification_type=None,
+    agent=None,
+    watch=False,
+    check_interval=60,
+):
     """Check the availability of free slots for courses and tests at VHS schools."""
     # TODO: introduce a watch mode
     # TODO: notify the user about the availability of a place, e.g. via telegram (configure using ENV vars)
@@ -65,7 +71,9 @@ def main(course, notification_type=None, agent=None, watch=False, check_interval
                     logger.info("Sending notification.", notification_type=notification_type)
                     res = notification_sender.send(f"Place is available for {browser.human_name()}.")
                     if not res:
-                        logger.error("Failed to send notification.", )
+                        logger.error(
+                            "Failed to send notification.",
+                        )
                 return
             logger.warn("No place available.")
             logger.info(f"Checking again in {check_interval} seconds.")
