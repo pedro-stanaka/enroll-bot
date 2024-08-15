@@ -23,5 +23,9 @@ class BaseSiteBrowser(ABC):
         pass
 
     @abstractmethod
+    def human_name(self):
+        pass
+
+    @abstractmethod
     def is_place_available(self, agent=None):
         pass
