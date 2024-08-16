@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 from playwright.sync_api import sync_playwright
 
+class ElementNotFoundError(ValueError):
+    pass
 
 class BaseSiteBrowser(ABC):
     def __init__(self, site):
@@ -15,7 +17,10 @@ class BaseSiteBrowser(ABC):
                 context = browser.new_context(user_agent=agent)
             page = context.new_page()
             page.goto(self.site)
-            return page.query_selector(element).inner_text()
+            wanted_el = page.query_selector(element)
+            if wanted_el:
+                return wanted_el.inner_text()
+            raise ElementNotFoundError(f"Element {element} not found on the page {self.site}")
 
     @staticmethod
     @abstractmethod

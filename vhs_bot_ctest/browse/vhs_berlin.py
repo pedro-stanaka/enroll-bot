@@ -1,4 +1,4 @@
-from vhs_bot_ctest.browse.base import BaseSiteBrowser
+from vhs_bot_ctest.browse.base import BaseSiteBrowser, ElementNotFoundError
 
 
 class VhsBerlinBrowser(BaseSiteBrowser):
@@ -15,5 +15,8 @@ class VhsBerlinBrowser(BaseSiteBrowser):
         return "VHS Berlin Einbürgerungstest"
 
     def is_place_available(self, agent=None):
-        message = self.get_text_for_element("#bomain #error_message", agent)
-        return "wurden keine Kurse gefunden" not in message
+        try:
+            message = self.get_text_for_element("#bomain #error_message", agent)
+            return "wurden keine Kurse gefunden" not in message
+        except ElementNotFoundError:
+            return True
