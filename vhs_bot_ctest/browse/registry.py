@@ -1,5 +1,6 @@
 from vhs_bot_ctest.browse.base import BaseSiteBrowser
 from vhs_bot_ctest.browse.vhs_berlin import VhsBerlinBrowser
+from vhs_bot_ctest.browse.berlin_passport import BerlinPassportBrowser
 
 
 class Registry:
@@ -23,3 +24,4 @@ class Registry:
 
 BrowserRegistry = Registry()
 BrowserRegistry.register_browser(VhsBerlinBrowser())
+BrowserRegistry.register_browser(BerlinPassportBrowser())
