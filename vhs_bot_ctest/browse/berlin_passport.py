@@ -24,7 +24,7 @@ class BerlinPassportBrowser(BaseSiteBrowser):
         try:
             # First check if the "no appointments" message is shown
             no_appointments_text = self.get_text_for_element(".herounit-article--default .title", agent)
-            if "keine Termine" in no_appointments_text.lower():
+            if "keine termine" in no_appointments_text.lower():
                 self.logger.warn(
                     "No appointments available",
                     message="The page explicitly states that no appointments are available at this time",
@@ -61,14 +61,15 @@ class BerlinPassportBrowser(BaseSiteBrowser):
                 # Get all calendar month tables
                 month_tables = page.query_selector_all(".calendar-month-table")
 
+                # Track the next available month shown
+                next_month = None
                 for table in month_tables:
-                    # Get the month name from the table header
                     month_header = table.query_selector(".month")
                     if month_header:
                         month_text = month_header.inner_text()
-                        # Check if this is the current month
+                        if not next_month:  # Store the first month we see
+                            next_month = month_text.split()[0]  # Get just the month name
                         if current_month in month_text:
-                            # Check for available dates in this month
                             available_dates = table.query_selector_all(".buchbar")
                             if available_dates:
                                 self.logger.info(
@@ -81,9 +82,9 @@ class BerlinPassportBrowser(BaseSiteBrowser):
 
                 browser.close()
                 self.logger.warn(
-                    f"No {current_month} appointments available",
-                    message=f"No available dates found in {current_month}",
-                    details=f"The calendar is displayed but no {current_month} dates are marked as available"
+                    "No appointments available",
+                    message=f"Next available calendar shown is for {next_month}",
+                    details=f"The calendar is displayed but no {next_month} dates are marked as available"
                 )
                 return False
 

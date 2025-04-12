@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from vhs_bot_ctest import notification
 from vhs_bot_ctest.browse.registry import BrowserRegistry
+from vhs_bot_ctest.logging import configure_logging
 
 FIVE_MINUTES_SECONDS = 5 * 60
 
@@ -52,6 +53,9 @@ def main(
     check_interval=60,
 ):
     """Check the availability of free slots for courses and tests at VHS schools."""
+    # Configure logging
+    configure_logging()
+
     # TODO: introduce a watch mode
     # TODO: notify the user about the availability of a place, e.g. via telegram (configure using ENV vars)
     #    package telegram-notification seems easy to use
