@@ -11,12 +11,14 @@ from prometheus_client import Counter, start_http_server
 from vhs_bot_ctest import notification
 from vhs_bot_ctest.browse.registry import BrowserRegistry
 from vhs_bot_ctest.logging import configure_logging
+from vhs_bot_ctest.browse.base import NetworkError, ElementNotFoundError
 
 FIVE_MINUTES_SECONDS = 5 * 60
 
 # Define Prometheus metrics
 TOTAL_CHECKS = Counter('vhs_bot_total_checks', 'Total number of availability checks')
 SUCCESSFUL_CHECKS = Counter('vhs_bot_successful_checks', 'Number of successful availability checks')
+NETWORK_ERRORS = Counter('vhs_bot_network_errors', 'Number of network errors encountered')
 
 @click.command()
 @click.option(
@@ -93,18 +95,29 @@ def main(
         browser = BrowserRegistry.get_browser(course)
         TOTAL_CHECKS.inc()
 
-        if browser.is_place_available(agent=agent):
-            SUCCESSFUL_CHECKS.inc()
-            logger.info("Place is available.")
-            notification_sender = registry.get_notification(notification_type)
-            if notification_sender is not None:
-                logger.info("Sending notification.", notification_type=notification_type)
-                res = notification_sender.send(f"Place is available for {browser.human_name()}.")
-                if not res:
-                    logger.error("Failed to send notification.")
-            return True
-        logger.warn("No place available.")
-        return False
+        try:
+            if browser.is_place_available(agent=agent):
+                SUCCESSFUL_CHECKS.inc()
+                logger.info("Place is available.")
+                notification_sender = registry.get_notification(notification_type)
+                if notification_sender is not None:
+                    logger.info("Sending notification.", notification_type=notification_type)
+                    res = notification_sender.send(f"Place is available for {browser.human_name()}.")
+                    if not res:
+                        logger.error("Failed to send notification.")
+                return True
+            logger.warn("No place available.")
+            return False
+        except NetworkError as e:
+            NETWORK_ERRORS.inc()
+            logger.error("Network error occurred", error=str(e))
+            return False
+        except ElementNotFoundError as e:
+            logger.error("Element not found", error=str(e))
+            return False
+        except Exception as e:
+            logger.error("Unexpected error occurred", error=str(e))
+            return False
 
     if watch:
         while True:
