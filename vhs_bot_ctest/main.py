@@ -102,7 +102,7 @@ def main(
                 notification_sender = registry.get_notification(notification_type)
                 if notification_sender is not None:
                     logger.info("Sending notification.", notification_type=notification_type)
-                    res = notification_sender.send(f"Place is available for {browser.human_name()}.")
+                    res = notification_sender.send(f"Place is available for {browser.human_name()}.\nBook here: {browser.site}")
                     if not res:
                         logger.error("Failed to send notification.")
                 return True
