@@ -6,7 +6,7 @@ from datetime import datetime
 
 class BerlinPassportBrowser(BaseSiteBrowser):
     def __init__(self):
-        super().__init__("https://service.berlin.de/terminvereinbarung/termin/all/121151/")
+        super().__init__("https://service.berlin.de/terminvereinbarung/termin/tag.php?termin=1&dienstleisterlist=122231%2C122238%2C122243%2C327346%2C327348%2C122260%2C329745%2C122280%2C122282%2C122284%2C327290%2C327292%2C327294%2C330436%2C351034%2C351065%2C351292%2C351325%2C352776&anliegenlist=121151")
         self.logger = structlog.get_logger()
 
     @staticmethod
