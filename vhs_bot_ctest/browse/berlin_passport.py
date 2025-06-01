@@ -32,6 +32,13 @@ class BerlinPassportBrowser(BaseSiteBrowser):
                 )
                 return False
 
+        except ElementNotFoundError:
+            # This is fine for this first check, it just means that the message for "No appointments" is not shown
+            # And we might have some appointments available, we continue to check if we have appointments available for
+            # the current month
+            pass
+
+        try:
             # Get current month in German
             german_months = {
                 1: "Januar",
@@ -80,6 +87,7 @@ class BerlinPassportBrowser(BaseSiteBrowser):
                                 browser.close()
                                 return True
 
+                time.sleep(10)
                 browser.close()
                 self.logger.warn(
                     "No appointments available",
